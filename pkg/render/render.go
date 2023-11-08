@@ -18,8 +18,13 @@ func NewTemplates(a *config.AppConfig) {
 
 // RenderTemplate using the text template of go
 func RenderTemplate(w http.ResponseWriter, tmpl string) {
-	// Get the template cache from the app config
-	tc := app.TemplateCache
+	var tc map[string]*template.Template
+	if app.UseCache {
+		// Get the template cache from the app config
+		tc = app.TemplateCache
+	} else {
+		tc, _ = CreateTemplateCache()
+	}
 
 	// get the template from cache
 	t, ok := tc[tmpl]
